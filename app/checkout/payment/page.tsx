@@ -3,6 +3,7 @@
 import React from 'react';
 import { CartProvider } from '@/src/context/CartContext';
 import CheckoutStepper from '@/src/components/checkout/CheckoutStepper';
+import PaymentForm from '@/src/components/checkout/PaymentForm';
 
 export default function PaymentPage() {
   return (
@@ -13,10 +14,7 @@ export default function PaymentPage() {
           <CheckoutStepper currentStep='payment' />
           <div className='bg-white rounded-lg shadow-md p-6'>
             <h2 className='text-2xl font-semibold mb-6'>Payment Information</h2>
-            <div className='border-2 border-dashed border-gray-300 rounded-lg p-8 text-center'>
-              <p className='text-gray-500'>PaymentForm component area</p>
-              <p className='text-sm text-gray-400 mt-2'>To be implemented</p>
-            </div>
+            <PaymentForm />
           </div>
         </div>
       </main>

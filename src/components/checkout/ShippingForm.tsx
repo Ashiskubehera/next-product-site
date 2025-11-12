@@ -3,6 +3,7 @@
 import React, { useState, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/src/context/CartContext';
+import styles from '@/src/styles/checkout.module.css';
 
 interface ShippingFormData {
   fullName: string;
@@ -114,10 +115,13 @@ export default function ShippingForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className='space-y-4'>
-      <div>
-        <label htmlFor='fullName' className='block text-sm font-medium text-gray-700 mb-1'>
-          Full Name <span className='text-red-500'>*</span>
+    <form onSubmit={handleSubmit} className={styles.formContainer} role='form' aria-label='Shipping information form'>
+      <div className={styles.formField}>
+        <label htmlFor='fullName' className={styles.label}>
+          Full Name{' '}
+          <span className='text-red-500' aria-label='required'>
+            *
+          </span>
         </label>
         <input
           type='text'
@@ -125,16 +129,23 @@ export default function ShippingForm() {
           name='fullName'
           value={formData.fullName}
           onChange={handleChange}
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-            errors.fullName ? 'border-red-500' : 'border-gray-300'
-          }`}
+          className={styles.input}
+          aria-invalid={errors.fullName ? 'true' : 'false'}
+          aria-describedby={errors.fullName ? 'fullName-error' : undefined}
         />
-        {errors.fullName && <p className='mt-1 text-sm text-red-500'>{errors.fullName}</p>}
+        {errors.fullName && (
+          <p id='fullName-error' className={styles.errorMessage} role='alert'>
+            {errors.fullName}
+          </p>
+        )}
       </div>
 
-      <div>
-        <label htmlFor='address1' className='block text-sm font-medium text-gray-700 mb-1'>
-          Address Line 1 <span className='text-red-500'>*</span>
+      <div className={styles.formField}>
+        <label htmlFor='address1' className={styles.label}>
+          Address Line 1{' '}
+          <span className='text-red-500' aria-label='required'>
+            *
+          </span>
         </label>
         <input
           type='text'
@@ -142,15 +153,19 @@ export default function ShippingForm() {
           name='address1'
           value={formData.address1}
           onChange={handleChange}
-          className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-            errors.address1 ? 'border-red-500' : 'border-gray-300'
-          }`}
+          className={styles.input}
+          aria-invalid={errors.address1 ? 'true' : 'false'}
+          aria-describedby={errors.address1 ? 'address1-error' : undefined}
         />
-        {errors.address1 && <p className='mt-1 text-sm text-red-500'>{errors.address1}</p>}
+        {errors.address1 && (
+          <p id='address1-error' className={styles.errorMessage} role='alert'>
+            {errors.address1}
+          </p>
+        )}
       </div>
 
-      <div>
-        <label htmlFor='address2' className='block text-sm font-medium text-gray-700 mb-1'>
+      <div className={styles.formField}>
+        <label htmlFor='address2' className={styles.label}>
           Address Line 2
         </label>
         <input
@@ -159,14 +174,18 @@ export default function ShippingForm() {
           name='address2'
           value={formData.address2}
           onChange={handleChange}
-          className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+          className={styles.input}
+          aria-invalid='false'
         />
       </div>
 
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-        <div>
-          <label htmlFor='city' className='block text-sm font-medium text-gray-700 mb-1'>
-            City <span className='text-red-500'>*</span>
+      <div className={styles.formGrid}>
+        <div className={styles.formField}>
+          <label htmlFor='city' className={styles.label}>
+            City{' '}
+            <span className='text-red-500' aria-label='required'>
+              *
+            </span>
           </label>
           <input
             type='text'
@@ -174,15 +193,19 @@ export default function ShippingForm() {
             name='city'
             value={formData.city}
             onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              errors.city ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={styles.input}
+            aria-invalid={errors.city ? 'true' : 'false'}
+            aria-describedby={errors.city ? 'city-error' : undefined}
           />
-          {errors.city && <p className='mt-1 text-sm text-red-500'>{errors.city}</p>}
+          {errors.city && (
+            <p id='city-error' className={styles.errorMessage} role='alert'>
+              {errors.city}
+            </p>
+          )}
         </div>
 
-        <div>
-          <label htmlFor='state' className='block text-sm font-medium text-gray-700 mb-1'>
+        <div className={styles.formField}>
+          <label htmlFor='state' className={styles.label}>
             State/Province
           </label>
           <input
@@ -191,15 +214,19 @@ export default function ShippingForm() {
             name='state'
             value={formData.state}
             onChange={handleChange}
-            className='w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+            className={styles.input}
+            aria-invalid='false'
           />
         </div>
       </div>
 
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-        <div>
-          <label htmlFor='postalCode' className='block text-sm font-medium text-gray-700 mb-1'>
-            Postal Code <span className='text-red-500'>*</span>
+      <div className={styles.formGrid}>
+        <div className={styles.formField}>
+          <label htmlFor='postalCode' className={styles.label}>
+            Postal Code{' '}
+            <span className='text-red-500' aria-label='required'>
+              *
+            </span>
           </label>
           <input
             type='text'
@@ -207,16 +234,23 @@ export default function ShippingForm() {
             name='postalCode'
             value={formData.postalCode}
             onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              errors.postalCode ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={styles.input}
+            aria-invalid={errors.postalCode ? 'true' : 'false'}
+            aria-describedby={errors.postalCode ? 'postalCode-error' : undefined}
           />
-          {errors.postalCode && <p className='mt-1 text-sm text-red-500'>{errors.postalCode}</p>}
+          {errors.postalCode && (
+            <p id='postalCode-error' className={styles.errorMessage} role='alert'>
+              {errors.postalCode}
+            </p>
+          )}
         </div>
 
-        <div>
-          <label htmlFor='country' className='block text-sm font-medium text-gray-700 mb-1'>
-            Country <span className='text-red-500'>*</span>
+        <div className={styles.formField}>
+          <label htmlFor='country' className={styles.label}>
+            Country{' '}
+            <span className='text-red-500' aria-label='required'>
+              *
+            </span>
           </label>
           <input
             type='text'
@@ -224,17 +258,21 @@ export default function ShippingForm() {
             name='country'
             value={formData.country}
             onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              errors.country ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={styles.input}
+            aria-invalid={errors.country ? 'true' : 'false'}
+            aria-describedby={errors.country ? 'country-error' : undefined}
           />
-          {errors.country && <p className='mt-1 text-sm text-red-500'>{errors.country}</p>}
+          {errors.country && (
+            <p id='country-error' className={styles.errorMessage} role='alert'>
+              {errors.country}
+            </p>
+          )}
         </div>
       </div>
 
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-        <div>
-          <label htmlFor='phone' className='block text-sm font-medium text-gray-700 mb-1'>
+      <div className={styles.formGrid}>
+        <div className={styles.formField}>
+          <label htmlFor='phone' className={styles.label}>
             Phone
           </label>
           <input
@@ -243,16 +281,23 @@ export default function ShippingForm() {
             name='phone'
             value={formData.phone}
             onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              errors.phone ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={styles.input}
+            aria-invalid={errors.phone ? 'true' : 'false'}
+            aria-describedby={errors.phone ? 'phone-error' : undefined}
           />
-          {errors.phone && <p className='mt-1 text-sm text-red-500'>{errors.phone}</p>}
+          {errors.phone && (
+            <p id='phone-error' className={styles.errorMessage} role='alert'>
+              {errors.phone}
+            </p>
+          )}
         </div>
 
-        <div>
-          <label htmlFor='email' className='block text-sm font-medium text-gray-700 mb-1'>
-            Email <span className='text-red-500'>*</span>
+        <div className={styles.formField}>
+          <label htmlFor='email' className={styles.label}>
+            Email{' '}
+            <span className='text-red-500' aria-label='required'>
+              *
+            </span>
           </label>
           <input
             type='email'
@@ -260,18 +305,23 @@ export default function ShippingForm() {
             name='email'
             value={formData.email}
             onChange={handleChange}
-            className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-              errors.email ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className={styles.input}
+            aria-invalid={errors.email ? 'true' : 'false'}
+            aria-describedby={errors.email ? 'email-error' : undefined}
           />
-          {errors.email && <p className='mt-1 text-sm text-red-500'>{errors.email}</p>}
+          {errors.email && (
+            <p id='email-error' className={styles.errorMessage} role='alert'>
+              {errors.email}
+            </p>
+          )}
         </div>
       </div>
 
       <div className='pt-4'>
         <button
           type='submit'
-          className='w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded transition-colors'
+          className={`${styles.button} ${styles.buttonPrimary}`}
+          aria-label='Continue to payment step'
         >
           Continue to Payment
         </button>

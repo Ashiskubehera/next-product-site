@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { CartItem as CartItemType } from '@/src/context/CartContext';
+import styles from '@/src/styles/checkout.module.css';
 
 interface CartItemProps {
   item: CartItemType;
@@ -14,32 +15,35 @@ export default function CartItem({ item, onIncrease, onDecrease, onRemove }: Car
   const subtotal = item.price * item.qty;
 
   return (
-    <div className='flex items-center justify-between border-b border-gray-200 py-4'>
-      <div className='flex-1'>
+    <div className={styles.cartItem} role='listitem'>
+      <div className={styles.cartItemContent}>
         <h3 className='text-lg font-semibold'>{item.name}</h3>
         <p className='text-sm text-gray-600'>Unit Price: ${item.price.toFixed(2)}</p>
         <p className='text-sm text-gray-600'>Quantity: {item.qty}</p>
         <p className='text-base font-medium mt-2'>Subtotal: ${subtotal.toFixed(2)}</p>
       </div>
-      <div className='flex items-center gap-2'>
+      <div className={styles.cartItemActions} role='group' aria-label='Cart item actions'>
         <button
           onClick={onDecrease}
-          className='px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded text-lg font-semibold'
-          aria-label='Decrease quantity'
+          className={styles.quantityButton}
+          aria-label={`Decrease quantity of ${item.name}`}
+          type='button'
         >
           -
         </button>
         <button
           onClick={onIncrease}
-          className='px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded text-lg font-semibold'
-          aria-label='Increase quantity'
+          className={styles.quantityButton}
+          aria-label={`Increase quantity of ${item.name}`}
+          type='button'
         >
           +
         </button>
         <button
           onClick={onRemove}
-          className='px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded text-sm font-medium'
-          aria-label='Remove item'
+          className={`${styles.button} ${styles.buttonDanger}`}
+          aria-label={`Remove ${item.name} from cart`}
+          type='button'
         >
           Remove
         </button>
