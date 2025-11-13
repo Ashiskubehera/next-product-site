@@ -32,8 +32,9 @@ export default function PaymentForm() {
 
   const calculateTotal = (): number => {
     const subtotal = state.items.reduce((sum, item) => sum + item.price * item.qty, 0);
-    const tax = subtotal * 0.1;
-    return subtotal + tax;
+    const tax = subtotal * 0.18;
+    const platformCharge = subtotal * 0.02;
+    return subtotal + tax + platformCharge;
   };
 
   const formatCardNumber = (value: string): string => {
@@ -155,28 +156,57 @@ export default function PaymentForm() {
       }
 
       if (data.success && data.paymentId) {
+        // Validate required data before creating order
+        if (!state.shipping) {
+          setSubmitError('Please add products and fill shipping details before payment.');
+          setIsLoading(false);
+          return;
+        }
+
+        if (!state.items || state.items.length === 0) {
+          setSubmitError('Your cart is empty. Please add items before checkout.');
+          setIsLoading(false);
+          return;
+        }
+
         // Create order via API
         try {
+          const orderPayload = {
+            paymentId: data.paymentId,
+            cart: { items: state.items },
+            shipping: state.shipping,
+          };
+
+          console.log('Sending order data:', orderPayload);
+
           const orderResponse = await fetch('/api/orders', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-              paymentId: data.paymentId,
-              cart: { items: state.items },
-              shipping: state.shipping,
-            }),
+            body: JSON.stringify(orderPayload),
           });
 
-          if (orderResponse.ok) {
-            const orderData = await orderResponse.json();
-            router.push(`/checkout/confirmation?orderId=${orderData.orderId}`);
+          const orderResponseData = await orderResponse.json();
+
+          if (!orderResponse.ok) {
+            // Show the actual error message from the API
+            const errorMessage = orderResponseData.error || 'Order creation failed. Please contact support.';
+            console.error('Order creation error:', errorMessage, orderResponseData);
+            setSubmitError(`Payment successful but order creation failed: ${errorMessage}`);
+            setIsLoading(false);
+            return;
+          }
+
+          // Success - redirect to confirmation
+          if (orderResponseData.success && orderResponseData.orderId) {
+            router.push(`/checkout/confirmation?orderId=${orderResponseData.orderId}`);
           } else {
             setSubmitError('Payment successful but order creation failed. Please contact support.');
             setIsLoading(false);
           }
         } catch (orderError) {
+          console.error('Order creation exception:', orderError);
           setSubmitError('Payment successful but order creation failed. Please contact support.');
           setIsLoading(false);
         }
@@ -288,7 +318,7 @@ export default function PaymentForm() {
           name='name'
           value={formData.name}
           onChange={handleChange}
-          placeholder='John Doe'
+          placeholder='Jeffrey Hanke'
           className={styles.input}
           aria-invalid={errors.name ? 'true' : 'false'}
           aria-describedby={errors.name ? 'name-error' : undefined}

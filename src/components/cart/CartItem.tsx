@@ -18,9 +18,9 @@ export default function CartItem({ item, onIncrease, onDecrease, onRemove }: Car
     <div className={styles.cartItem} role='listitem'>
       <div className={styles.cartItemContent}>
         <h3 className='text-lg font-semibold'>{item.name}</h3>
-        <p className='text-sm text-gray-600'>Unit Price: ${item.price.toFixed(2)}</p>
+        <p className='text-sm text-gray-600'>Unit Price: ₹{item.price.toFixed(2)}</p>
         <p className='text-sm text-gray-600'>Quantity: {item.qty}</p>
-        <p className='text-base font-medium mt-2'>Subtotal: ${subtotal.toFixed(2)}</p>
+        <p className='text-base font-medium mt-2'>Subtotal: ₹{subtotal.toFixed(2)}</p>
       </div>
       <div className={styles.cartItemActions} role='group' aria-label='Cart item actions'>
         <button
