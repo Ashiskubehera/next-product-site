@@ -71,11 +71,12 @@ function ConfirmationContent() {
   }, [orderId]);
 
   const calculateTotals = () => {
-    if (!order) return { subtotal: 0, tax: 0, total: 0 };
+    if (!order) return { subtotal: 0, tax: 0, fee: 0, total: 0 };
     const subtotal = order.cart.items.reduce((sum, item) => sum + item.price * item.qty, 0);
-    const tax = subtotal * 0.1;
-    const total = subtotal + tax;
-    return { subtotal, tax, total };
+    const tax = subtotal * 0.18; // 18% tax GST
+    const fee = subtotal * 0.02; // 2% Platform charge
+    const total = subtotal + tax + fee;
+    return { subtotal, tax, fee, total };
   };
 
   const getEmailInfo = () => {
@@ -90,9 +91,9 @@ Status: ${order.status}
 Created: ${new Date(order.createdAt).toLocaleString()}
 
 Items:
-${order.cart.items.map((item) => `- ${item.name} x${item.qty} - $${(item.price * item.qty).toFixed(2)}`).join('\n')}
+${order.cart.items.map((item) => `- ${item.name} x${item.qty} - ₹${(item.price * item.qty).toFixed(2)}`).join('\n')}
 
-Total: $${calculateTotals().total.toFixed(2)}
+Total: ₹${calculateTotals().total.toFixed(2)}
 
 Shipping Address:
 ${order.shipping.fullName || ''}
@@ -160,10 +161,10 @@ We'll send you a confirmation email shortly.`;
                   <div className='flex-1'>
                     <p className='font-medium'>{item.name}</p>
                     <p className='text-sm text-gray-600'>
-                      ${item.price.toFixed(2)} x {item.qty}
+                      ₹{item.price.toFixed(2)} x {item.qty}
                     </p>
                   </div>
-                  <p className='font-semibold'>${(item.price * item.qty).toFixed(2)}</p>
+                  <p className='font-semibold'>₹{(item.price * item.qty).toFixed(2)}</p>
                 </div>
               ))}
             </div>
@@ -174,15 +175,19 @@ We'll send you a confirmation email shortly.`;
             <div className='space-y-2'>
               <div className='flex justify-between text-sm'>
                 <span className='text-gray-600'>Subtotal:</span>
-                <span className='font-medium'>${totals.subtotal.toFixed(2)}</span>
+                <span className='font-medium'>₹{totals.subtotal.toFixed(2)}</span>
               </div>
               <div className='flex justify-between text-sm'>
                 <span className='text-gray-600'>Tax:</span>
-                <span className='font-medium'>${totals.tax.toFixed(2)}</span>
+                <span className='font-medium'>₹{totals.tax.toFixed(2)}</span>
+              </div>
+              <div className='flex justify-between text-sm'>
+                <span className='text-gray-600'>Platform Charges:</span>
+                <span className='font-medium'>₹{totals.fee.toFixed(2)}</span>
               </div>
               <div className='flex justify-between text-lg font-semibold pt-2 border-t border-gray-200'>
                 <span>Total:</span>
-                <span>${totals.total.toFixed(2)}</span>
+                <span>₹{totals.total.toFixed(2)}</span>
               </div>
             </div>
           </div>

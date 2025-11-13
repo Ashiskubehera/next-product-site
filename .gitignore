@@ -36,5 +36,4 @@ next-env.d.ts
 storybook-static
 
 # generated data
-src/data/emails.log
-STRUCTURE_REVIEW.md
+src/data

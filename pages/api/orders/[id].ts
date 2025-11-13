@@ -15,7 +15,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Read orders file
-    const ordersFilePath = path.join(process.cwd(), 'src', 'mock', 'small', 'orders.json');
+    // const ordersFilePath = path.join(process.cwd(), 'src', 'mock', 'small', 'orders.json');
+    const ordersFilePath = path.join(process.cwd(), 'src', 'data', 'orders.json');
 
     let orders: any[] = [];
     try {

@@ -2,7 +2,7 @@ import largeData from '@/src/mock/large/products.json';
 import smallData from '@/src/mock/small/products.json';
 import { notFound } from 'next/navigation';
 
-const productDetail = async ({ params }: { params: { productId: string } }) => {
+const productDetail = async ({ params }: { params: Promise<{ productId: string }> }) => {
   const resolvedParams = await params;
   const data = [...largeData, ...smallData];
   const product = data.find((item) => item.id === resolvedParams.productId);
